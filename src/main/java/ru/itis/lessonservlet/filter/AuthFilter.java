@@ -1,43 +1,46 @@
 package ru.itis.lessonservlet.filter;
 
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebFilter("/*")
+@Component("authFilter")
 public class AuthFilter implements Filter {
 
+    @Autowired
+    @Qualifier("PROTECTED_URIS")
     private List<String> PROTECTED_URIS;
+    @Autowired
+    @Qualifier("NOTAUTH_URIS")
     private List<String> NOTAUTH_URIS;
+    @Autowired
+    @Qualifier("PROTECTED_ADMIN_URIS")
     private List<String> PROTECTED_ADMIN_URIS;
 
+    @Autowired
+    @Qualifier("PROTECTED_REDIRECT")
     private String PROTECTED_REDIRECT;
+    @Autowired
+    @Qualifier("PROTECTED_ADMIN_REDIRECT")
     private String PROTECTED_ADMIN_REDIRECT;
+    @Autowired
+    @Qualifier("NOTAUTH_REDIRECT")
     private String NOTAUTH_REDIRECT;
 
+    @Autowired
+    @Qualifier("AUTHORIZATION")
     private String AUTHORIZATION;
+    @Autowired
+    @Qualifier("IS_ADMIN")
     private String IS_ADMIN;
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-        ServletContext context = filterConfig.getServletContext();
-
-        PROTECTED_URIS = (List<String>) context.getAttribute("PROTECTED_URIS");
-        NOTAUTH_URIS = (List<String>) context.getAttribute("NOTAUTH_URIS");
-        PROTECTED_ADMIN_URIS = (List<String>) context.getAttribute("PROTECTED_ADMIN_URIS");
-
-        PROTECTED_REDIRECT = (String) context.getAttribute("PROTECTED_REDIRECT");
-        PROTECTED_ADMIN_REDIRECT = (String) context.getAttribute("PROTECTED_ADMIN_REDIRECT");
-        NOTAUTH_REDIRECT = (String) context.getAttribute("NOTAUTH_REDIRECT");
-        AUTHORIZATION = (String) context.getAttribute("AUTHORIZATION");
-        IS_ADMIN = (String) context.getAttribute("IS_ADMIN");
-    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

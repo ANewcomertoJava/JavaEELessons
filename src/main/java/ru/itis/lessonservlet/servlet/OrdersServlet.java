@@ -8,9 +8,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.context.ApplicationContext;
 import ru.itis.lessonservlet.dto.response.ListProductsResponse;
 import ru.itis.lessonservlet.dto.response.UserDataResponse;
-import ru.itis.lessonservlet.model.OrdersEntity;
+import ru.itis.lessonservlet.entity.OrdersEntity;
 import ru.itis.lessonservlet.service.OrdersService;
 import ru.itis.lessonservlet.service.ProductService;
 
@@ -25,9 +26,10 @@ public class OrdersServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        ServletContext servletContext = getServletContext();
-        ordersService = (OrdersService) servletContext.getAttribute("ordersService");
-        productService = (ProductService) servletContext.getAttribute("productService");
+        ApplicationContext context = (ApplicationContext) getServletContext().getAttribute("springContext");
+
+        this.ordersService = context.getBean("ordersService", OrdersService.class);
+        this.productService = context.getBean("productService", ProductService.class);
     }
 
     @Override
